@@ -4,8 +4,6 @@ import { readData, writeData} from "../dataService"
 
 const router = express.Router()
 
-let ingredients: Ingredient[] = [];
-
 router.get("/ingredients", async (req: Request, res: Response) => {
     try {
         const data = await readData();

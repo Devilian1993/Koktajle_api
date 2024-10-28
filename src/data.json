@@ -27,6 +27,30 @@
           "quantity": "to top"
         }
       ]
+    },
+    {
+      "id": 2,
+      "name": "Margarita",
+      "category": "Cocktail",
+      "instructions": "Shake tequila, lime juice, and triple sec with ice. Strain into a salt-rimmed glass.",
+      "ingredients": [
+        {
+          "name": "Tequila",
+          "quantity": "45 ml"
+        },
+        {
+          "name": "Lime Juice",
+          "quantity": "30 ml"
+        },
+        {
+          "name": "Triple Sec",
+          "quantity": "15 ml"
+        },
+        {
+          "name": "Salt",
+          "quantity": "for rimming the glass"
+        }
+      ]
     }
   ],
   "ingredients": [

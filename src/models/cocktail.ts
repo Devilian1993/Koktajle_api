@@ -4,6 +4,6 @@ export interface Cocktail {
     id: number;
     name: string;
     category: string;
-    recipe: string;
+    instructions: string;
     ingredients: IngredientQuantity[];
 }

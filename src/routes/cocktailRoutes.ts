@@ -1,60 +1,95 @@
 import express, { Request, Response } from 'express';
 import { Cocktail } from "../models/cocktail"
+import {readData, writeData} from "../dataService";
+import {Ingredient} from "../models/ingredient";
 
 const router = express.Router();
 
-let cocktails:  Cocktail[] = [];
-
-router.get("/cocktails", (req: Request, res: Response) => {
-   res.json(cocktails);
-});
-
-router.get("/cocktails/:id", (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const cocktail = cocktails.find(c => c.id === id);
-
-    if (cocktail) {
-        res.json(cocktail)
-    } else {
-        res.status(404).json({ error: "Cocktail not found" });
+router.get("/cocktails", async (req: Request, res: Response) => {
+    try {
+        const data = await readData();
+        res.json(data.cocktails);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to read data' });
     }
 });
 
-router.post("/cocktails", (req: Request, res: Response) => {
-    const newCocktail: Cocktail = req.body;
+router.get("/cocktails/:id", async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
 
-    if (!newCocktail.name || !newCocktail.category || !newCocktail.recipe || !newCocktail.category) {
-        res.status(400).json({ error: "All fields are required. "})
-    } else {
-        newCocktail.id = cocktails.length > 0 ? Math.max(...cocktails.map(c => c.id)) + 1 : 1;
-        cocktails.push(newCocktail);
-        res.status(201).json(newCocktail)
+    try {
+        // Odczytujemy dane z pliku data.json
+        const data = await readData();
+        const cocktails: Cocktail[] = data.cocktails; // Pobieramy tablicę składników
+
+        const cocktail = cocktails.find(i => i.id === id);
+
+        if (cocktail) {
+            res.json(cocktail); // Zwracamy składnik jako odpowiedź
+        } else {
+            res.status(404).json({ error: "Cocktail not found" }); // Obsługujemy przypadek, gdy składnik nie istnieje
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Error reading data" }); // Obsługujemy błąd odczytu pliku
     }
 })
 
-router.put("/cocktails/:id", (req: Request, res: Response) => {
+router.post("/cocktails", async (req: Request, res: Response) => {
+    const newCocktail: Cocktail = req.body;
+    try {
+        const data = await readData();
+        if (!newCocktail.name || !newCocktail.category || !newCocktail.instructions || !newCocktail.ingredients) {
+            res.status(400).json({error: "All fields are required. "})
+        } else {
+            newCocktail.id = data.cocktails.length ? Math.max(...data.cocktails.map((c: Cocktail) => c.id)) + 1 : 1;
+            data.cocktails.push(newCocktail);
+            await writeData(data);
+            res.status(201).json(newCocktail);
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add cocktail' });
+    }
+})
+
+router.put('/cocktails/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const updatedData = req.body;
 
-    const cocktailIndex = cocktails.findIndex(c => c.id === id);
-    if (cocktailIndex > -1) {
-        cocktails[cocktailIndex] = { ...cocktails[cocktailIndex], ...updatedData};
-        res.json(cocktails[cocktailIndex])
-    } else {
-        res.status(404).json({ error: "Cocktail not found"});
-    }
-})
+    try {
+        const data = await readData();
+        const cocktails: Cocktail[] = data.cocktails;
+        const cocktailIndex: number = cocktails.findIndex(c => c.id === id);
 
-router.delete("/cocktails/:id", (req: Request, res: Response) => {
+        if (cocktailIndex > -1) {
+            data.cocktails[cocktailIndex] = { ...data.cocktails[cocktailIndex], ...updatedData };
+            await writeData(data);
+            res.json(data.cocktails[cocktailIndex]);
+        } else {
+            res.status(404).json({ error: 'Cocktail not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update cocktail' });
+    }
+});
+
+router.delete('/cocktails/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
 
-    const cocktailIndex = cocktails.findIndex(c => c.id === id);
-    if (cocktailIndex > -1) {
-        cocktails.splice(cocktailIndex, 1);
-        res.status(200).send('Cocktail deleted');
-    } else {
-        res.status(404).json({ error: "Cocktail not found"});
+    try {
+        const data = await readData();
+        const cocktails: Cocktail[] = data.cocktails;
+        const cocktailIndex: number = cocktails.findIndex(c => c.id === id);
+
+        if (cocktailIndex > -1) {
+            data.cocktails.splice(cocktailIndex, 1);
+            await writeData(data);
+            res.status(200).send('Cocktail deleted');
+        } else {
+            res.status(404).json({ error: 'Cocktail not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete cocktail' });
     }
-})
+});
 
 export default router;
