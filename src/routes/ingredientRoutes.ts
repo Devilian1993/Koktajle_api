@@ -7,7 +7,17 @@ const router = express.Router()
 router.get("/ingredients", async (req: Request, res: Response) => {
     try {
         const data = await readData();
-        res.json(data.ingredients);
+        let ingredients: Ingredient[] = data.ingredients
+
+        if (req.query.name) {
+            const name = req.query.name as string;
+            ingredients = ingredients.filter(ingredient => ingredient.name.toLowerCase().includes(name.toLowerCase()))
+        }
+        if (req.query.is_alcoholic) {
+            const is_alcoholic = req.query.is_alcoholic === "true"
+            ingredients = ingredients.filter(ingredient => ingredient.is_alcoholic === is_alcoholic)
+        }
+        res.json(ingredients);
     } catch (error) {
         res.status(500).json({ error: 'Failed to read data' });
     }
