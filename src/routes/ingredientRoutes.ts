@@ -17,6 +17,14 @@ router.get("/ingredients", async (req: Request, res: Response) => {
             const is_alcoholic = req.query.is_alcoholic === "true"
             ingredients = ingredients.filter(ingredient => ingredient.is_alcoholic === is_alcoholic)
         }
+        if (req.query.sortBy) {
+            const key = req.query.sortBy as keyof Ingredient
+            ingredients.sort((a, b) => {
+                if (a[key] > b[key]) return 1;
+                if (a[key] < b[key]) return -1;
+                return 0;
+            })
+        }
         res.json(ingredients);
     } catch (error) {
         res.status(500).json({ error: 'Failed to read data' });
