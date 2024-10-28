@@ -1,0 +1,83 @@
+{
+  "cocktails": [
+    {
+      "id": 1,
+      "name": "Mojito",
+      "category": "Cocktail",
+      "instructions": "Muddle mint leaves with sugar and lime juice. Add rum and top with soda water.",
+      "ingredients": [
+        {
+          "name": "Mint",
+          "quantity": "10 leaves"
+        },
+        {
+          "name": "Sugar",
+          "quantity": "2 tsp"
+        },
+        {
+          "name": "Lime",
+          "quantity": "1"
+        },
+        {
+          "name": "Rum",
+          "quantity": "50 ml"
+        },
+        {
+          "name": "Soda Water",
+          "quantity": "to top"
+        }
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "id": 1,
+      "name": "Mint",
+      "desc": "Fresh mint leaves",
+      "is_alcoholic": false,
+      "photo": "url_to_photo"
+    },
+    {
+      "id": 2,
+      "name": "Rum",
+      "desc": "Alcoholic beverage made from sugarcane",
+      "is_alcoholic": true,
+      "photo": "url_to_photo"
+    },
+    {
+      "id": 3,
+      "name": "Sugar",
+      "desc": "Cukier",
+      "is_alcoholic": false,
+      "photo": "url_to_photo"
+    },
+    {
+      "id": 4,
+      "name": "Lime",
+      "desc": "Limonka",
+      "is_alcoholic": false,
+      "photo": "url_to_photo"
+    },
+    {
+      "id": 5,
+      "name": "Soda water",
+      "desc": "Woda gazowana",
+      "is_alcoholic": false,
+      "photo": "url_to_photo"
+    },
+    {
+      "id": 6,
+      "name": "Still water",
+      "desc": "Woda niegazowana",
+      "is_alcoholic": false,
+      "photo": "url"
+    },
+    {
+      "id": 7,
+      "name": "Whiskey",
+      "desc": "Bursztynowe whiskey",
+      "is_alcoholic": true,
+      "photo": "url"
+    }
+  ]
+}

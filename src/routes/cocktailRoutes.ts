@@ -26,7 +26,7 @@ router.post("/cocktails", (req: Request, res: Response) => {
     if (!newCocktail.name || !newCocktail.category || !newCocktail.recipe || !newCocktail.category) {
         res.status(400).json({ error: "All fields are required. "})
     } else {
-        newCocktail.id = cocktails.length + 1;
+        newCocktail.id = cocktails.length > 0 ? Math.max(...cocktails.map(c => c.id)) + 1 : 1;
         cocktails.push(newCocktail);
         res.status(201).json(newCocktail)
     }
