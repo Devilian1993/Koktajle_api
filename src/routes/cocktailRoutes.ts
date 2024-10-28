@@ -8,7 +8,22 @@ const router = express.Router();
 router.get("/cocktails", async (req: Request, res: Response) => {
     try {
         const data = await readData();
-        res.json(data.cocktails);
+        let cocktails: Cocktail[] = data.cocktails;
+
+        if (req.query.name) {
+            const name = req.query.name as string;
+            cocktails = cocktails.filter(cocktail => cocktail.name.toLowerCase().includes(name.toLowerCase()))
+        }
+        if (req.query.category) {
+            const category = req.query.category as string;
+            cocktails = cocktails.filter(cocktail => cocktail.category.toLowerCase() === category.toLowerCase())
+        }
+        if (req.query.ingredientName) {
+            const ingredientName = req.query.ingredientName as string
+            cocktails = cocktails.filter(cocktail => cocktail.ingredients.some(ingredient => ingredient.name.toLowerCase() === ingredientName.toLowerCase()))
+        }
+
+        res.json(cocktails)
     } catch (error) {
         res.status(500).json({ error: 'Failed to read data' });
     }
