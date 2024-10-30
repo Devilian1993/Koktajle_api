@@ -25,7 +25,7 @@ router.get("/ingredients", async (req: Request, res: Response) => {
                 return 0;
             })
         }
-        res.json(ingredients);
+        res.status(200).json(ingredients);
     } catch (error) {
         res.status(500).json({ error: 'Failed to read data' });
     }
