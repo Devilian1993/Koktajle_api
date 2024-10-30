@@ -35,19 +35,18 @@ router.get("/ingredients/:id", async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
 
     try {
-        // Odczytujemy dane z pliku data.json
         const data = await readData();
-        const ingredients: Ingredient[] = data.ingredients; // Pobieramy tablicę składników
+        const ingredients: Ingredient[] = data.ingredients;
 
         const ingredient = ingredients.find(i => i.id === id);
 
         if (ingredient) {
-            res.json(ingredient); // Zwracamy składnik jako odpowiedź
+            res.json(ingredient);
         } else {
-            res.status(404).json({ error: "Ingredient not found" }); // Obsługujemy przypadek, gdy składnik nie istnieje
+            res.status(404).json({ error: "Ingredient not found" });
         }
     } catch (error) {
-        res.status(500).json({ error: "Error reading data" }); // Obsługujemy błąd odczytu pliku
+        res.status(500).json({ error: "Error reading data" });
     }
 })
 
